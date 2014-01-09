@@ -1,0 +1,12 @@
+﻿@using Blog.Entities
+@model Blog.Models.AllBlogPostsViewModel 
+@{
+    ViewBag.Title = "Index";
+    
+}
+
+@foreach (BlogPost post in Model.BlogPosts)
+{
+    <h2 style="padding-bottom: 5px;">@post.Title</h2>
+    <p>@Model.ChopOffPost(post)<a href="/home/post?id=@post.Id">more...</a></p>
+}

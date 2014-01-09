@@ -1,0 +1,18 @@
+﻿@using Blog.Entities
+@model Blog.Models.CommentViewModel
+
+@foreach (Comment comment in Model.Comments)
+{
+    if (comment.ReplyId == null)
+    {
+        <div class="col-md-3">
+            <p>@comment.CommentContent</p>
+        </div>
+    }
+    else
+    {
+        <div class="col-md-3 col-md-offset-1">
+            <p>@comment.CommentContent</p>
+        </div>
+    }
+}

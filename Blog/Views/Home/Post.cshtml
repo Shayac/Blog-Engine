@@ -1,0 +1,17 @@
+﻿@model Blog.Models.BlogPostViewModel
+@{
+    ViewBag.Title = "Post";
+}
+
+<div class="row">
+    
+    <div class="col-md-3">
+        <h2>@Model.Post.Title</h2>
+        <p>@Model.Post.PostContent</p>
+    </div>
+
+</div>
+
+<div class="row">
+    @Html.Partial("_comment");
+</div>
