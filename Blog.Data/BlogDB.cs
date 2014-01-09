@@ -37,8 +37,21 @@ namespace Blog.Data
                 return func(reader);
             }
         }
-
-        public IEnumerable<T> MapFromDB<T>(SqlDataReader reader)
+        public T MapSingleFromDb<T>(SqlDataReader reader)
+            where T: new ()
+        {
+            var properties = typeof(T).GetProperties(BindingFlags.Instance | BindingFlags.Public);
+            reader.Read();
+            var item = new T();
+            foreach (PropertyInfo prop in properties)
+            {
+                var name = prop.Name;
+                prop.SetValue(item, reader[name]);
+            }
+           return item;
+            
+        }
+        public IEnumerable<T> MapAllFromDB<T>(SqlDataReader reader)
             where T: new ()
         {
             var properties = typeof (T).GetProperties(BindingFlags.Instance | BindingFlags.Public);
@@ -59,10 +72,17 @@ namespace Blog.Data
             return result;
         }
 
+
         public IEnumerable<BlogPost> GetBlogPosts()
         {
 
-            return DBCrud("SELECT * FROM BlogPosts", null, MapFromDB<BlogPost>);
+            return DBCrud("SELECT * FROM BlogPosts", null, MapAllFromDB<BlogPost>);
+        } 
+
+        public BlogPost GetBlogPost(int id)
+        {
+            return DBCrud("SELECT * FROM BlogPosts WHERE Id = @Id", new Dictionary<string, object>() { { "@Id", id } },
+                          MapSingleFromDb<BlogPost>);
         } 
     }
 }
