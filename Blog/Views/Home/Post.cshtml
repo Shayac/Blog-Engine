@@ -7,11 +7,11 @@
     
     <div class="col-md-3">
         <h2>@Model.Post.Title</h2>
-        <p>@Model.Post.PostContent</p>
+        <p>@Model.Post.PostBody</p>
     </div>
 
 </div>
 
 <div class="row">
-    @Html.Partial("_comment");
+    @Html.Partial("_comment",Model.Comments)
 </div>

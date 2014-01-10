@@ -1,0 +1,21 @@
+﻿@model Blog.Models.AuthorsViewModel 
+@{
+    ViewBag.Title = "New Post";
+    
+}
+
+<h2>New Post</h2>
+<div class="btn-danger"></div>
+
+<form action="/admin/createpost" method="POST">
+    <select name="authorid">
+        @foreach (var author in Model.Authors)
+        {
+            <option value="@author.Id">@author.LastName, @author.FirstName</option>
+        }
+    </select>
+    <input type="text" name="title" placeholder="Enter title here"/>
+    <br/>
+    <textarea name="postbody" placeholder="Enter blog body"></textarea>
+    <input type="submit" value="Submit"/>
+</form>

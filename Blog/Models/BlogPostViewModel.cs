@@ -9,5 +9,6 @@ namespace Blog.Models
     public class BlogPostViewModel
     {
         public BlogPost Post { get; set; }
+        public IEnumerable<Comment> Comments { get; set; }
     }
 }

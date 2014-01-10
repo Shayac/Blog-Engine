@@ -28,8 +28,8 @@ namespace Blog.Controllers
         {
             BlogPost post = db.GetBlogPost(id);
             BlogPostViewModel model = new BlogPostViewModel() {Post = post};
-            IEnumerable<Comment> comments = db.GetComments(id);
-            CommentViewModel commentViewModel = new CommentViewModel() {Comments = comments};
+            model.Comments = db.GetComments(id);
+            
             
             return View(model);
         }

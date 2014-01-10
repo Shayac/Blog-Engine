@@ -1,7 +1,7 @@
 ﻿@using Blog.Entities
-@model Blog.Models.CommentViewModel
+@model IEnumerable<Blog.Entities.Comment>
 
-@foreach (Comment comment in Model.Comments)
+@foreach (Comment comment in Model)
 {
     if (comment.ReplyId == null)
     {

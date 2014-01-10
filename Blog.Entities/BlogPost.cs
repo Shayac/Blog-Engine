@@ -7,7 +7,7 @@ namespace Blog.Entities
         public string Title { get; set; }
         public int Id { get; set; }
         public int AuthorId { get; set; }
-        public string PostContent { get; set; }
+        public string PostBody { get; set; }
         public DateTime Date { get; set; }
     }
 }
