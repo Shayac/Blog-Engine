@@ -122,13 +122,14 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
+    <Compile Include="Controllers\AdminController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\AllBlogPostsViewModel.cs" />
+    <Compile Include="Models\AuthorsViewModel.cs" />
     <Compile Include="Models\BlogPostViewModel.cs" />
-    <Compile Include="Models\CommentViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -218,6 +219,8 @@
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Home\Post.cshtml" />
     <Content Include="Views\Home\_comment.cshtml" />
+    <Content Include="Views\Admin\Index.cshtml" />
+    <Content Include="Views\Admin\NewPost.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

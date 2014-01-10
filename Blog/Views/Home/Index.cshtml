@@ -8,5 +8,7 @@
 @foreach (BlogPost post in Model.BlogPosts)
 {
     <h2 style="padding-bottom: 5px;">@post.Title</h2>
-    <p>@Model.ChopOffPost(post)<a href="/home/post?id=@post.Id">more...</a></p>
+    <p>
+        @Html.Raw(Model.ChopOffPost(post))<a href="/home/post?id=@post.Id"> &nbsp;more...</a>
+    </p>
 }

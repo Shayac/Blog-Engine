@@ -18,6 +18,11 @@ namespace Blog.Data
             _connectionString = connectionString;
         }
 
+        #region readerAbstraction
+        private T DBCrud<T>(string commandText, Func<SqlDataReader, T> func)
+        {
+            return DBCrud(commandText, null, func);
+        }
         private T DBCrud<T>(string commandText, Dictionary<string, object> parameters, Func<SqlDataReader, T> func)
         {
             using (SqlConnection connection = new SqlConnection(_connectionString))
@@ -71,8 +76,9 @@ namespace Blog.Data
 
             return result;
         }
+        #endregion
 
-
+        #region GetFromDB
         public IEnumerable<BlogPost> GetBlogPosts()
         {
 
@@ -83,6 +89,45 @@ namespace Blog.Data
         {
             return DBCrud("SELECT * FROM BlogPosts WHERE Id = @Id", new Dictionary<string, object>() { { "@Id", id } },
                           MapSingleFromDb<BlogPost>);
-        } 
+        }
+
+        public IEnumerable<Author> GetAuthors()
+        {
+            return DBCrud("SELECT * FROM Authors ORDER BY LastName", MapAllFromDB<Author>);
+        }
+
+
+        public IEnumerable<Comment> GetComments(int id)
+        {
+            return DBCrud("SELECT * FROM Comments WHERE BlogPostId = @id",
+                          new Dictionary<string, object>() {{"@id", id}}, MapAllFromDB<Comment>);
+        }
+        #endregion
+
+        #region InsertToDb
+
+        public int CreatePost(BlogPost post)
+        {
+            using (SqlConnection connection = new SqlConnection(_connectionString))
+            using(SqlCommand command = connection.CreateCommand())
+            {
+                command.CommandText =
+                    "INSERT INTO BlogPosts (AuthorId, PostBody, Date, Title) VALUES (@AuthorId, @PostBody, @Date, @Title); SELECT @@Identity;";
+                PropertyInfo[] properties = typeof(BlogPost).GetProperties(BindingFlags.Instance | BindingFlags.Public);
+                foreach (var prop in properties)
+                {
+                    if (prop.Name == "Id")
+                    {
+                        continue;
+                    }
+
+                    command.Parameters.AddWithValue(prop.Name, prop.GetValue(post));
+                }
+                connection.Open();
+                return (int)(decimal)command.ExecuteScalar();
+            }
+        }
+
+        #endregion
     }
 }
