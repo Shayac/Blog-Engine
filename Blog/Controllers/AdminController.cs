@@ -32,8 +32,23 @@ namespace Blog.Controllers
         {
             post.Date = DateTime.Now;
             int postid = db.CreatePost(post);
+            //@todo redirect to post page
+            //@todo validate and check for null input
+            return RedirectToAction("Index");
+        }
 
+        public ActionResult NewAuthor()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public ActionResult CreateAuthor(Author author)
+        {
+            db.CreateAuthor(author);
             return RedirectToAction("Index");
         }
     }
+
+
 }

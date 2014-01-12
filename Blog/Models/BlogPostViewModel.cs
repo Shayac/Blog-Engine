@@ -10,5 +10,6 @@ namespace Blog.Models
     {
         public BlogPost Post { get; set; }
         public IEnumerable<Comment> Comments { get; set; }
+        public IEnumerable<User> Users { get; set; } 
     }
 }

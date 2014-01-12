@@ -1,4 +1,5 @@
-﻿@model Blog.Models.BlogPostViewModel
+﻿@using Blog.Entities
+@model Blog.Models.BlogPostViewModel
 @{
     ViewBag.Title = "Post";
 }
@@ -14,4 +15,22 @@
 
 <div class="row">
     @Html.Partial("_comment",Model.Comments)
+    
+</div>
+
+
+<div class="row">
+    <form action="/home/createComment" method="POST">
+        <select name="userid">
+            @foreach (User user in Model.Users)
+            {
+                <option value="@user.Id">@user.LastName, @user.FirstName</option> 
+            }
+        </select>
+       <div><a href="/home/newUser">Add New User</a></div> 
+    <textarea name="commentbody" placeholder="Enter comment"></textarea>
+    <input type="hidden" name="blogpostid" value="@Model.Post.Id"/>
+    <input type="submit" value="Submit"/>
+
+</form>
 </div>

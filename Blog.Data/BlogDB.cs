@@ -96,6 +96,10 @@ namespace Blog.Data
             return DBCrud("SELECT * FROM Authors ORDER BY LastName", MapAllFromDB<Author>);
         }
 
+        public IEnumerable<User> GetUsers()
+        {
+            return DBCrud("SELECT * FROM Users ORDER BY LastName", MapAllFromDB<User>);
+        }
 
         public IEnumerable<Comment> GetComments(int id)
         {
@@ -125,6 +129,73 @@ namespace Blog.Data
                 }
                 connection.Open();
                 return (int)(decimal)command.ExecuteScalar();
+            }
+        }
+
+       
+
+        public void CreateAuthor(Author author)
+        {
+            using (SqlConnection connection = new SqlConnection(_connectionString))
+            using (SqlCommand command = connection.CreateCommand())
+            {
+                command.CommandText =
+                    "INSERT INTO Authors (FirstName, LastName, Email) VALUES (@FirstName, @LastName, @Email);";
+                command.Parameters.AddWithValue("@FirstName", author.FirstName);
+                command.Parameters.AddWithValue("@LastName", author.LastName);
+                command.Parameters.AddWithValue("@Email", author.Email);
+                //@todo refactor to helper method
+                connection.Open();
+                command.ExecuteNonQuery();
+            }
+        }
+
+
+        public void CreateComment(Comment comment)
+        {
+            using (SqlConnection connection = new SqlConnection(_connectionString))
+            using (SqlCommand command = connection.CreateCommand())
+            {
+                command.CommandText =
+                    "INSERT INTO Comments (UserId, BlogPostId, CommentBody, Date) VALUES (@UserId, @BlogPostId, @CommentBody, @Date);";
+                PropertyInfo[] properties = typeof(Comment).GetProperties(BindingFlags.Instance | BindingFlags.Public);
+                foreach (var prop in properties)
+                {
+                    if (prop.Name == "Id")
+                    {
+                        continue;
+                    } else if (prop.Name == "ReplyId")
+                    {
+                        command.Parameters.AddWithValue(prop.Name, DBNull.Value);
+                        continue;
+                    }
+
+                    command.Parameters.AddWithValue(prop.Name, prop.GetValue(comment));
+                }
+                connection.Open();
+                command.ExecuteNonQuery();
+            }
+        }
+
+        public void CreateUser(User user)
+        {
+            using (SqlConnection connection = new SqlConnection(_connectionString))
+            using (SqlCommand command = connection.CreateCommand())
+            {
+                command.CommandText =
+                    "INSERT INTO Users (FirstName, LastName, Email) VALUES (@FirstName, @LastName, @Email)";
+                PropertyInfo[] properties = typeof(User).GetProperties(BindingFlags.Instance | BindingFlags.Public);
+                foreach (var prop in properties)
+                {
+                    if (prop.Name == "Id")
+                    {
+                        continue;
+                    }
+
+                    command.Parameters.AddWithValue(prop.Name, prop.GetValue(user));
+                }
+                connection.Open();
+                command.ExecuteNonQuery();
             }
         }
 

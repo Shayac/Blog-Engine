@@ -221,6 +221,8 @@
     <Content Include="Views\Home\_comment.cshtml" />
     <Content Include="Views\Admin\Index.cshtml" />
     <Content Include="Views\Admin\NewPost.cshtml" />
+    <Content Include="Views\Admin\NewAuthor.cshtml" />
+    <Content Include="Views\Home\NewUser.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
