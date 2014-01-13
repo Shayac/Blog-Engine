@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
+using System.Threading;
 using System.Web;
 using System.Web.Mvc;
 using Blog.Data;
@@ -40,8 +41,8 @@ namespace Blog.Controllers
         {
             comment.Date = DateTime.Now;
             db.CreateComment(comment);
-
-            return RedirectToAction("Post/"+comment.BlogPostId);
+            Thread.Sleep(2000);
+            return PartialView("_comment", comment);
         }
 
         public ActionResult NewUser()

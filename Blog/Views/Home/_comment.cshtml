@@ -1,18 +1,16 @@
 ﻿@using Blog.Entities
-@model IEnumerable<Blog.Entities.Comment>
+@model Comment
 
-@foreach (Comment comment in Model)
-{
-    if (comment.ReplyId == null)
+
+    @if (Model.ReplyId == null)
     {
         <div class="col-md-3">
-            <p>@comment.CommentBody</p>
+            <p>@Model.CommentBody</p>
         </div>
     }
     else
     {
         <div class="col-md-3 col-md-offset-1">
-            <p>@comment.CommentBody</p>
+            <p>@Model.CommentBody</p>
         </div>
     }
-}

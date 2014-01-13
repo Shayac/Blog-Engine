@@ -43,7 +43,7 @@ namespace Blog.Data
             }
         }
         public T MapSingleFromDb<T>(SqlDataReader reader)
-            where T: new ()
+            where T : new()
         {
             var properties = typeof(T).GetProperties(BindingFlags.Instance | BindingFlags.Public);
             reader.Read();
@@ -53,13 +53,13 @@ namespace Blog.Data
                 var name = prop.Name;
                 prop.SetValue(item, reader[name]);
             }
-           return item;
-            
+            return item;
+
         }
         public IEnumerable<T> MapAllFromDB<T>(SqlDataReader reader)
-            where T: new ()
+            where T : new()
         {
-            var properties = typeof (T).GetProperties(BindingFlags.Instance | BindingFlags.Public);
+            var properties = typeof(T).GetProperties(BindingFlags.Instance | BindingFlags.Public);
             var result = new List<T>();
             while (reader.Read())
             {
@@ -69,7 +69,15 @@ namespace Blog.Data
                     //var attribute = prop.GetCustomAttribute<DbColumnNameAttribute>();
                     //var name = attribute == null ? prop.Name : attribute.ColumnName;
                     var name = prop.Name;
-                    prop.SetValue(item, reader[name]);
+                    var value = reader[name];
+                    if (value == DBNull.Value)
+                    {
+                        prop.SetValue(item, null);
+                    }
+                    else
+                    {
+                        prop.SetValue(item, reader[name]);
+                    }
                 }
                 result.Add(item);
             }
@@ -83,7 +91,7 @@ namespace Blog.Data
         {
 
             return DBCrud("SELECT * FROM BlogPosts", null, MapAllFromDB<BlogPost>);
-        } 
+        }
 
         public BlogPost GetBlogPost(int id)
         {
@@ -104,7 +112,7 @@ namespace Blog.Data
         public IEnumerable<Comment> GetComments(int id)
         {
             return DBCrud("SELECT * FROM Comments WHERE BlogPostId = @id",
-                          new Dictionary<string, object>() {{"@id", id}}, MapAllFromDB<Comment>);
+                          new Dictionary<string, object>() { { "@id", id } }, MapAllFromDB<Comment>);
         }
         #endregion
 
@@ -113,7 +121,7 @@ namespace Blog.Data
         public int CreatePost(BlogPost post)
         {
             using (SqlConnection connection = new SqlConnection(_connectionString))
-            using(SqlCommand command = connection.CreateCommand())
+            using (SqlCommand command = connection.CreateCommand())
             {
                 command.CommandText =
                     "INSERT INTO BlogPosts (AuthorId, PostBody, Date, Title) VALUES (@AuthorId, @PostBody, @Date, @Title); SELECT @@Identity;";
@@ -132,7 +140,7 @@ namespace Blog.Data
             }
         }
 
-       
+
 
         public void CreateAuthor(Author author)
         {
@@ -164,13 +172,15 @@ namespace Blog.Data
                     if (prop.Name == "Id")
                     {
                         continue;
-                    } else if (prop.Name == "ReplyId")
+                    }
+                    if (prop.Name == "ReplyId")
                     {
                         command.Parameters.AddWithValue(prop.Name, DBNull.Value);
                         continue;
                     }
 
                     command.Parameters.AddWithValue(prop.Name, prop.GetValue(comment));
+
                 }
                 connection.Open();
                 command.ExecuteNonQuery();

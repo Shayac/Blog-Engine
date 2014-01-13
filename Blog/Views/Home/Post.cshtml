@@ -13,24 +13,31 @@
 
 </div>
 
-<div class="row">
-    @Html.Partial("_comment",Model.Comments)
+<div class="row" id="commentsDiv">
+    @foreach (Comment comment in Model.Comments)
+    {
+        @Html.Partial("_comment", comment)
+    }
     
 </div>
 
 
 <div class="row">
-    <form action="/home/createComment" method="POST">
-        <select name="userid">
+    <form id="commentForm">
+        <select name="userid" id="userId">
             @foreach (User user in Model.Users)
             {
                 <option value="@user.Id">@user.LastName, @user.FirstName</option> 
             }
         </select>
-       <div><a href="/home/newUser">Add New User</a></div> 
-    <textarea name="commentbody" placeholder="Enter comment"></textarea>
-    <input type="hidden" name="blogpostid" value="@Model.Post.Id"/>
-    <input type="submit" value="Submit"/>
+        <div><a href="/home/newUser">Add New User</a></div> 
+        <textarea name="commentbody" placeholder="Enter comment" id="commentbody"></textarea>
+        <input type="hidden" name="blogpostid" value="@Model.Post.Id" id="blogpostid"/>
+        <input id="commentSubmit" type="submit" value="Submit"/>
 
-</form>
+    </form>
 </div>
+@section scripts{
+    <script type="text/javascript" src="~/Scripts/Comments.js"></script>
+    
+}
